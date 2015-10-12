@@ -5,17 +5,15 @@ $(function(){
     var i = $('.colModel').length;
     
     var html = "";
-    html += "<div class='col-sm-4 col-md-3 colModel'>";
+    html += "<div class='col-sm-6 col-md-4 col-lg-3 colModel'>";
     html += "<div class='well'>";
-    html += "<p>Model "+i+" name: <input type='text' name='modelNames'></p>";
+    html += "<p><input type='text' class='form-control' name='modelNames' placeholder='Model Name'></p>";
+    html += "<hr>";
+    html += "<div class='attrs attrs"+i+"'><div class='attr'><p><input type='text' name='attrName"+i+"' class='form-control' placeholder='Attribute Name'></p>";
+    html += "<p><select name='attrType"+i+"' class='form-control'><option value='string'>string</option><option value='int'>int</option></select></p>";
+    html += "<p><input type='checkbox' name='attrMulti"+i+"'> Multilanguaje  <input type='checkbox' name='attrRequired"+i+"'> Required</p>";
     
-    html += "<p>-----------</p>"
-    
-    html += "<div class='attrs attrs"+i+"'><div class='attr'><p>Attr "+i+" name: <input type='text' name='attrName"+i+"'></p>";
-    html += "<p>Attr "+i+" type: <input type='text' name='attrType"+i+"'></p>";
-    html += "<p>Attr "+i+" multilanguaje: <input type='checkbox' name='attrMulti"+i+"'></p>";
-    
-    html += "<p>-----------</p></div>";
+    html += "<hr></div>";
     html += "</div>";
     
     html += "<p><a href='javascript:void(0)' class='btn btn-default btn-xs' onclick='addAttr("+i+")'>Add other attribute</a></p>";
@@ -34,10 +32,10 @@ function addAttr(id){
   var i = id;
   
   var html = "";
-   html += "<div class='attr'><p>Attr "+i+" name: <input type='text' name='attrName"+i+"'></p>";
-    html += "<p>Attr "+i+" type: <input type='text' name='attrType"+i+"'></p>";
-    html += "<p>Attr "+i+" multilanguaje: <input type='checkbox' name='attrMulti"+i+"'></p>";
+   html += "<div class='attr'><p><input type='text' name='attrName"+i+"' class='form-control' placeholder='Attribute Name'></p>";
+    html += "<p><select name='attrType"+i+"' class='form-control'><option value='string'>string</option><option value='int'>int</option></select></p>";
+    html += "<p><input type='checkbox' name='attrMulti"+i+"'> Multilanguaje  <input type='checkbox' name='attrRequired"+i+"'> Required</p>";
     
-    html += "<p>-----------</p></div>"
+    html += "<hr></div>"
   $('.attrs' + id).append(html);
 }
