@@ -1,17 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><%= title %></title>
+    
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    
   </head>
   <body>
   <form action="/createPage" method="post">
+   
+   <div class="container">
+   
+   <br>
+   
+   <div class="jumbotron">
+    <h1>Sails-maker</h1>
+    </div>
     
-    <p>
-      Webpage Title: <input type="text" name="firstname">
-    </p>
+    <p>Project name: <input type="text" name="project"></p>
     
-    <p>------------------NEW MODEL---------------------</p>
+    <p><a href="javascript:void(0)" class="btn btn-primary" id="newModel">Create Model</a></p>
+    <br>
+    
+    <div class="row" id="models"></div>
+    
+    <!--<p>------------------NEW MODEL---------------------</p>
     <p>Model name: <input type="text" name="modelName1"></p>
     <p>-----------------------------------------------</p>
     <p>Atribute 1 name: <input type="text" name="attrName1"></p>
@@ -23,7 +40,20 @@
     <p>Atribute 2 multilanguaje: <input type="checkbox" name="attrMulti2"></p>
     <p>-----------------------------------------------</p>
 <br>
-    <input type="submit" value="Submit">
-  </form>    
+   
+   -->
+    <input type="submit" class="btn btn-default" value="Crear proyecto">
+  </form>   
+  
+  
+  </div>
+  
+   
+    
+     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script> 
+    <script src="js/functions.js"></script> 
   </body>
 </html>

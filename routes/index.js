@@ -9,6 +9,26 @@ router.get('/', function(req, res, next) {
 
 /* POST web page downloader. */
 router.post('/createPage', function(req, res, next) {
+  
+  var data = req.body;
+  //Get models and attributes
+  
+  /* EXAMPLE
+  { project: 'APP TEST',
+     modelNames: [ 'TEST1', 'TEST2' ],
+     attrName0: 'attr0',
+     attrType0: 'attr0',
+     attrName1: [ 'attr1', 'attr12' ],
+     attrType1: [ 'attr1', 'attr12' ] },*/
+  
+  for(var i = 0; i < data.modelNames; i++ ){
+    //data.modelNames[i]; -> Model NAME
+    //----------------------------------------
+    //Get attributes properties for each model
+    //-----------------------------------------
+    //for(...)
+  }
+  
   var path = __dirname + '/../template/static';
   var zipPath = __dirname + '/../.tmp/webpage.zip';
 
