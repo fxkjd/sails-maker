@@ -11,6 +11,7 @@ router.get('/', function(req, res, next) {
 router.post('/createPage', function(req, res, next) {
   
   var data = req.body;
+  console.log(data);
   //Get models and attributes
   
   /* EXAMPLE
@@ -29,7 +30,7 @@ router.post('/createPage', function(req, res, next) {
     //for(...)
   }
   
-  var path = __dirname + '/../template/static';
+  /*var path = __dirname + '/../template/static';
   var zipPath = __dirname + '/../.tmp/webpage.zip';
 
   var output = file_system.createWriteStream(zipPath);
@@ -56,7 +57,7 @@ router.post('/createPage', function(req, res, next) {
   archive.bulk([
       { expand: true, cwd: path, src: ['**'], dest: "webpage"}
   ]);
-  archive.finalize();
+  archive.finalize();*/
 });
 
 module.exports = router;
