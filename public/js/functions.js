@@ -3,7 +3,7 @@ $(function(){
   //AJAX FORM
   $("#form").submit(function(e){
     //code here
-    var f = $( this ).serializeJSON();
+    //var f = $( this ).serializeJSON();
     var f = $(this).toObject();
     console.log(f);
     
@@ -28,13 +28,19 @@ $(function(){
     var i = $('.colModel').length;
     
     var html = "";
+    html += "<input type='hidden' value='0' name='models["+i+"].attr[0].multi'>";
+    html += "<input type='hidden' value='0' name='models["+i+"].attr[0].required'>";
+    
     html += "<div id='model"+i+"' class='col-sm-6 col-md-4 col-lg-3 colModel'>";
     html += "<div class='well'>";
     html += "<p><input type='text' class='form-control' name='models["+i+"].name' placeholder='Model Name'></p>";
     html += "<hr>";
     html += "<div class='attrs attrs"+i+"'><div class='attr'><p><input type='text' name='models["+i+"].attr[0].name' class='form-control attrName' placeholder='Attribute Name'></p>";
     html += "<p><select name='models["+i+"].attr[0].type' class='form-control attrType'><option value='string'>string</option><option value='int'>int</option></select></p>";
-    html += "<p><input type='checkbox' class='attrMulti' name='attrMulti"+i+"'> Multilanguaje  <input type='checkbox' class='attrRequired' name='attrRequired"+i+"'> Required</p>";
+    
+    html += "<p><input type='checkbox' class='attrMulti' value='1' name='models["+i+"].attr[0].multi'> Multilanguaje  <input type='checkbox' class='attrRequired' value='1' name='models["+i+"].attr[0].required'> Required</p>";
+    
+    
     
     html += "<hr></div>";
     html += "</div>";
@@ -53,12 +59,15 @@ $(function(){
 function addAttr(i){
   var n = $("#model"+i+" .attr").length;
   var html = "";
-   html += "<div class='attr'><p><input type='text' name='models["+i+"].attr["+n+"].name' class='form-control' placeholder='Attribute Name'></p>";
-    html += "<p><select name='models["+i+"].attr["+n+"].type' class='form-control'><option value='string'>string</option><option value='int'>int</option></select></p>";
-    html += "<p><input type='checkbox' name='attrMulti"+i+"'> Multilanguaje  <input type='checkbox' name='attrRequired"+i+"'> Required</p>";
-    html += "<p><a href='javascript:void(0)' onclick='delAttr(this)'>Delete attribute</a></p>";
+  html += "<input type='hidden' value='0' name='models["+i+"].attr["+n+"].multi'>";
+  html += "<input type='hidden' value='0' name='models["+i+"].attr["+n+"].required'>";
+  
+  html += "<div class='attr'><p><input type='text' name='models["+i+"].attr["+n+"].name' class='form-control' placeholder='Attribute Name'></p>";
+  html += "<p><select name='models["+i+"].attr["+n+"].type' class='form-control'><option value='string'>string</option><option value='int'>int</option></select></p>";
+  html += "<p><input type='checkbox' value='0' name='models["+i+"].attr["+n+"].multi'> Multilanguaje  <input type='checkbox' name='models["+i+"].attr["+n+"].required' value='1'> Required</p>";
+  html += "<p><a href='javascript:void(0)' onclick='delAttr(this)'>Delete attribute</a></p>";
     
-    html += "<hr></div>"
+  html += "<hr></div>"
   $('.attrs' + i).append(html);
 }
 
