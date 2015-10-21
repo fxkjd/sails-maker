@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var file_system = require('fs');
-var archiver = require('archiver');
+var express = require('express')
+  , creator = require('../services/creator')
+  , router = express.Router();
+
+var zip = __dirname + '/../.tmp/webpage.zip';
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -9,55 +10,56 @@ router.get('/', function(req, res, next) {
 
 /* POST web page downloader. */
 router.post('/createPage', function(req, res, next) {
-  
+
+  //Get models and attributes  
   var data = req.body;
-  console.log(data);
-  //Get models and attributes
-  
-  /* EXAMPLE
-  { project: 'APP TEST',
-     modelNames: [ 'TEST1', 'TEST2' ],
-     attrName0: 'attr0',
-     attrType0: 'attr0',
-     attrName1: [ 'attr1', 'attr12' ],
-     attrType1: [ 'attr1', 'attr12' ] },*/
-  
-  for(var i = 0; i < data.modelNames; i++ ){
-    //data.modelNames[i]; -> Model NAME
-    //----------------------------------------
-    //Get attributes properties for each model
-    //-----------------------------------------
-    //for(...)
-  }
-  
-  /*var path = __dirname + '/../template/static';
-  var zipPath = __dirname + '/../.tmp/webpage.zip';
+  var models = [
+    {
+      name: "animal",
+      attr: [
+        {
+          name: "name",
+          type: "string"
+        },
+        {
+          name: "weight",
+          type: "int"
+        }
+      ]
+    },
+    {
+      name: "user",
+      attr: [
+        {
+          name: "name",
+          type: "string"
+        },
+        {
+          name: "street",
+          type: "string"
+        }
+      ]
+    }
+  ];
 
-  var output = file_system.createWriteStream(zipPath);
-  var archive = archiver('zip');
-
-  output.on('close', function () {
-      console.log(archive.pointer() + ' total bytes');
-      console.log('archiver has been finalized and the output file descriptor has closed.');
-      res.download(zipPath, function(err){
+  creator.CreateProject(models, function(zipPath, err) { 
+    if (err) {
+      return next(err)
+    } else {
+      console.log("ZIP PATH: " +zipPath);
+      console.log("ZIP PATH: " + zip);
+      res.download(zip, function(err){
+        console.log(err);
         if (!err) return; // file sent
         if (err && err.status !== 404) return next(err); // non-404 error
         // file for download not found
         res.statusCode = 404;
         res.send('Cant find that file, sorry!');
       });
-
+    }
   });
 
-  archive.on('error', function(err){
-      throw err;
-  });
 
-  archive.pipe(output);
-  archive.bulk([
-      { expand: true, cwd: path, src: ['**'], dest: "webpage"}
-  ]);
-  archive.finalize();*/
 });
 
 module.exports = router;
