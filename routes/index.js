@@ -48,7 +48,7 @@ router.post('/createPage', function(req, res, next) {
     } else {
       console.log("ZIP PATH: " +zipPath);
       console.log("ZIP PATH: " + zip);
-      res.json({ ok: '1' })
+      res.json({ ok: 1 })
     }
   });
 

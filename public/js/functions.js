@@ -15,7 +15,9 @@ $(function(){
       dataType: 'json',
       async: false,
       success: function(msg) {
-          alert(msg);
+          if(msg.ok){
+            $("#dw").html('<br><a href="/downloadProject">Download project</a>');
+          }
       }
     });
     

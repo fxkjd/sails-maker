@@ -1,12 +1,20 @@
 var Promise = require("bluebird")
+  , mkdirp = require('mkdirp')
   , fs = Promise.promisifyAll(require('fs'))
   , archiver = Promise.promisifyAll(require('archiver'))
   , ncp = Promise.promisify(require('ncp').ncp)
   , ejs = require('ejs')
   , path = __dirname + '/../template/model.ejs'
   , pathC = __dirname + '/../template/controller.ejs'
+
+  , pathVIndex = __dirname + '/../template/views/index.ejs'
+  , pathVAdd = __dirname + '/../template/views/add.ejs'
+
   , str = fs.readFileSync(path, 'utf8')
-  , strC = fs.readFileSync(pathC, 'utf8');
+  , strC = fs.readFileSync(pathC, 'utf8')
+
+  , strVIndex = fs.readFileSync(pathVIndex, 'utf8')
+  , strVAdd = fs.readFileSync(pathVAdd, 'utf8');
 
 var staticPath = __dirname + '/../template/static'
   , path = __dirname + '/../.tmp/webpage'
@@ -41,6 +49,30 @@ var controllerFiles = function(model) {
   return fs.writeFile(path + "/api/controllers/" + localFilename.capitalizeFirstLetter() + ".js", ret);
 };
 
+var indexFiles = function(model) {
+  
+  mkdirp(path + "/views/" + model.name, function(err) { 
+      var ret = ejs.render(strVIndex, {
+        name: model.name,
+        attributes: model.attr
+      });
+
+      return fs.writeFile(path + "/views/" + model.name + "/index.ejs", ret);
+  });
+};
+
+var addFiles = function(model) {
+  
+  mkdirp(path + "/views/" + model.name, function(err) { 
+      var ret = ejs.render(strVAdd, {
+        name: model.name,
+        attributes: model.attr
+      });
+
+      return fs.writeFile(path + "/views/" + model.name + "/add.ejs", ret);
+  });
+};
+
 module.exports = {
   CreateProject: function (models, cb) {    
     console.log("IN CREATOR");
@@ -50,6 +82,10 @@ module.exports = {
       Promise.map(models, modelFiles);
     }).then(function() {
       Promise.map(models, controllerFiles);
+    }).then(function() {
+      Promise.map(models, indexFiles);
+    }).then(function() {
+      Promise.map(models, addFiles);
     }).then(function () {
       var output = fs.createWriteStream(zipPath);
       var archive = archiver('zip');
