@@ -73,46 +73,6 @@ module.exports = {
       console.log(err);
       cb(null, err);
     });
-    /*if (err) {
-      return console.error(err);
-    }
-
-    var ret = ejs.render(str, {
-      name: models[0].name,
-      attributes: models[0].attr
-    });
-
-    fs.writeFile(path + "/api/models/" + models[0].name.capitalizeFirstLetter(), ret, function(err) {
-      if(err) {
-          return console.log(err);
-      }
-      var output = file_system.createWriteStream(zipPath);
-      var archive = archiver('zip');
-
-      output.on('close', function () {
-          console.log(archive.pointer() + ' total bytes');
-          console.log('archiver has been finalized and the output file descriptor has closed.');
-          res.download(zipPath, function(err){
-            if (!err) return; // file sent
-            if (err && err.status !== 404) return next(err); // non-404 error
-            // file for download not found
-            res.statusCode = 404;
-            res.send('Cant find that file, sorry!');
-          });
-
-      });
-
-      archive.on('error', function(err){
-          throw err;
-      });
-
-      archive.pipe(output);
-      archive.bulk([
-          { expand: true, cwd: path, src: ['**'], dest: "webpage"}
-      ]);
-      archive.finalize();
-      console.log('done!');
-    });*/
   }
 };
 

@@ -48,18 +48,22 @@ router.post('/createPage', function(req, res, next) {
     } else {
       console.log("ZIP PATH: " +zipPath);
       console.log("ZIP PATH: " + zip);
-      res.download(zip, function(err){
-        console.log(err);
-        if (!err) return; // file sent
-        if (err && err.status !== 404) return next(err); // non-404 error
-        // file for download not found
-        res.statusCode = 404;
-        res.send('Cant find that file, sorry!');
-      });
+      res.json({ ok: '1' })
     }
   });
 
-
 });
+
+router.get('/downloadProject', function(req, res, next) {
+  res.download(zip, function(err){
+    console.log(err);
+    if (!err) return; // file sent
+    if (err && err.status !== 404) return next(err); // non-404 error
+    // file for download not found
+    res.statusCode = 404;
+    res.send('Cant find that file, sorry!');
+  });  
+});
+
 
 module.exports = router;
