@@ -51,9 +51,9 @@ var indexFiles = function(model) {
         nameC: model.name.capitalizeFirstLetter(),
         namePlural: model.name + "s", //TODO: fix this name
         attributes: model.attr,
-        S: "<%",
-        SE: "<%=",
-        E: "%>"
+        S: "%",
+        SE: "%=",
+        E: "%"
       });
 
       return fs.writeFile(path + "/views/" + model.name + "/index.ejs", ret);
