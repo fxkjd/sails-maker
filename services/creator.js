@@ -6,15 +6,10 @@ var Promise = require("bluebird")
   , ejs = require('ejs')
   , path = __dirname + '/../template/model.ejs'
   , pathC = __dirname + '/../template/controller.ejs'
-
   , pathVIndex = __dirname + '/../template/views/index.ejs'
-  , pathVAdd = __dirname + '/../template/views/add.ejs'
-
   , str = fs.readFileSync(path, 'utf8')
   , strC = fs.readFileSync(pathC, 'utf8')
-
   , strVIndex = fs.readFileSync(pathVIndex, 'utf8')
-  , strVAdd = fs.readFileSync(pathVAdd, 'utf8');
 
 var staticPath = __dirname + '/../template/static'
   , path = __dirname + '/../.tmp/webpage'
@@ -50,26 +45,18 @@ var controllerFiles = function(model) {
 };
 
 var indexFiles = function(model) {
-  
   mkdirp(path + "/views/" + model.name, function(err) { 
       var ret = ejs.render(strVIndex, {
         name: model.name,
-        attributes: model.attr
+        nameC: model.name.capitalizeFirstLetter(),
+        namePlural: model.name + "s", //TODO: fix this name
+        attributes: model.attr,
+        S: "<%",
+        SE: "<%=",
+        E: "%>"
       });
 
       return fs.writeFile(path + "/views/" + model.name + "/index.ejs", ret);
-  });
-};
-
-var addFiles = function(model) {
-  
-  mkdirp(path + "/views/" + model.name, function(err) { 
-      var ret = ejs.render(strVAdd, {
-        name: model.name,
-        attributes: model.attr
-      });
-
-      return fs.writeFile(path + "/views/" + model.name + "/add.ejs", ret);
   });
 };
 
@@ -84,8 +71,6 @@ module.exports = {
       Promise.map(models, controllerFiles);
     }).then(function() {
       Promise.map(models, indexFiles);
-    }).then(function() {
-      Promise.map(models, addFiles);
     }).then(function () {
       var output = fs.createWriteStream(zipPath);
       var archive = archiver('zip');
