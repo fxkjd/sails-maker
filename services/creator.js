@@ -1,15 +1,24 @@
 var Promise = require("bluebird")
-  , mkdirp = require('mkdirp')
   , fs = Promise.promisifyAll(require('fs'))
   , archiver = Promise.promisifyAll(require('archiver'))
   , ncp = Promise.promisify(require('ncp').ncp)
+  , mkdirp = require('mkdirp-promise')
   , ejs = require('ejs')
   , path = __dirname + '/../template/model.ejs'
   , pathC = __dirname + '/../template/controller.ejs'
   , pathVIndex = __dirname + '/../template/views/index.ejs'
+  , pathVAdd = __dirname + '/../template/views/add.ejs'
+  , pathVEdit = __dirname + '/../template/views/edit.ejs'
+  , pathVShow = __dirname + '/../template/views/show.ejs'
+  , pathVForm = __dirname + '/../template/views/form.ejs'
+
   , str = fs.readFileSync(path, 'utf8')
   , strC = fs.readFileSync(pathC, 'utf8')
   , strVIndex = fs.readFileSync(pathVIndex, 'utf8')
+  , strVAdd = fs.readFileSync(pathVAdd, 'utf8')
+  , strVEdit = fs.readFileSync(pathVEdit, 'utf8')
+  , strVShow = fs.readFileSync(pathVShow, 'utf8')
+  , strVForm = fs.readFileSync(pathVForm, 'utf8');
 
 var staticPath = __dirname + '/../template/static'
   , path = __dirname + '/../.tmp/webpage'
@@ -19,44 +28,43 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-var modelFiles = function(model) {
-  var ret = ejs.render(str, {
-    name: model.name,
-    attributes: model.attr
-  });
+var createFiles = function(model) {
 
-  return fs.writeFile(path + "/api/models/" + model.name.capitalizeFirstLetter() + ".js", ret);
-};
-
-var controllerFiles = function(model) {
-
-  var localFilename = model.name + "Controller";
-  var ret = ejs.render(strC, {
+  var modelInfo = {
     name: model.name,
     nameC: model.name.capitalizeFirstLetter(),
     namePlural: model.name + "s", //TODO: fix this name
     attributes: model.attr,
     attributesNOI18N: model.attr,
     hasI18N: false,
-    localFilename: localFilename
-  });
+    localFilename: model.name + "Controller",
+    E: "%>",
+    S: "<%",
+    SE: "<%=",
+    SP: "<%-"
+  };
 
-  return fs.writeFile(path + "/api/controllers/" + localFilename.capitalizeFirstLetter() + ".js", ret);
-};
+  var retM = ejs.render(str, modelInfo)
+  , retC = ejs.render(strC, modelInfo)
+  , retVI = ejs.render(strVIndex, modelInfo)
+  , retVA = ejs.render(strVAdd, modelInfo)
+  , retVE = ejs.render(strVEdit, modelInfo)
+  , retVS = ejs.render(strVShow, modelInfo)
+  , retVF = ejs.render(strVForm, modelInfo);
 
-var indexFiles = function(model) {
-  mkdirp(path + "/views/" + model.name, function(err) { 
-      var ret = ejs.render(strVIndex, {
-        name: model.name,
-        nameC: model.name.capitalizeFirstLetter(),
-        namePlural: model.name + "s", //TODO: fix this name
-        attributes: model.attr,
-        S: "%",
-        SE: "%=",
-        E: "%"
-      });
-
-      return fs.writeFile(path + "/views/" + model.name + "/index.ejs", ret);
+  mkdirp(path + "/views/" + modelInfo.name)
+  .then(function(made){
+    return [
+      fs.writeFile(path + "/api/models/" + modelInfo.name.capitalizeFirstLetter() + ".js", retM),
+      fs.writeFile(path + "/api/controllers/" + modelInfo.localFilename.capitalizeFirstLetter() + ".js", retC),
+      fs.writeFile(path + "/views/" + modelInfo.name + "/index.ejs", retVI),
+      fs.writeFile(path + "/views/" + modelInfo.name + "/add.ejs", retVA),
+      fs.writeFile(path + "/views/" + modelInfo.name + "/edit.ejs", retVE),
+      fs.writeFile(path + "/views/" + modelInfo.name + "/show.ejs", retVS),
+      fs.writeFile(path + "/views/" + modelInfo.name + "/form.ejs", retVF)
+    ];
+  }).catch(function(e) {
+    throw e;
   });
 };
 
@@ -64,13 +72,10 @@ module.exports = {
   CreateProject: function (models, cb) {    
     console.log("IN CREATOR");
     console.log("models: %j",models);
+      
     ncp(staticPath, path)
     .then(function() {
-      Promise.map(models, modelFiles);
-    }).then(function() {
-      Promise.map(models, controllerFiles);
-    }).then(function() {
-      Promise.map(models, indexFiles);
+      Promise.map(models, createFiles);
     }).then(function () {
       var output = fs.createWriteStream(zipPath);
       var archive = archiver('zip');

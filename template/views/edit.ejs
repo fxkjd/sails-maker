@@ -3,14 +3,15 @@
     background: #f0f0f0;
     border-top: 2px solid #eee;
     padding: 20px;
+	margin-bottom: 50px;
   }
 </style>
 
 <div class="container">
-
+ 
  <!-- HEADER -->
   <div class="jumbotron" style="margin-top:40px;">
-    <h1>Add <%= name %></h1>
+    <h1>Edit <%= name %></h1>
   </div>
   
   <%- S %> if( req.session.flash && req.session.flash.error ){ <%- E %>
@@ -25,15 +26,14 @@
     </div>
   <%- S %> } <%- E %>
   
-  <form role="form" action="/<%= name %>/create">
+  <form role="form" action="/<%= name %>/update/<%-SE%><%= name%>.id<%-E%>">
 
   <%- SP %> partial('form.ejs', {<%= name %>:<%= name %>}) <%- E %>
   
   <div class="buttonsContainer">
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn btn-primary">Update</button>
   </div>
-    
-  </form>
+</form>
     
     <% for(var i in attributes){ %>
       <% if( attributes[i].type == "image" ){ %>
